@@ -1,22 +1,42 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header/header';
 import Formulario from './components/Formulario/formulario';
 import MiOrg from './components/MiOrg';
 import Equipo from './components/Equipo';
+import Footer from './components/Footer';
 
 function App() {
   const [mostrarFormulario, actualizarMostrar] = useState(false);
+  const [colaboradores, actualizarColaboradores] = useState(() => {
+    const datosGuardados = localStorage.getItem('colaboradores');
+    return datosGuardados ? JSON.parse(datosGuardados) : [{
+      equipo: "Programación",
+      foto: "https://avatars.githubusercontent.com/u/93751686?v=4",
+      nombre: "Marlon Yber",
+      puesto: "Ingeniero de Sistemas",
+    }];
+  });
 
   const cambiarMostrar = () => {
     actualizarMostrar(!mostrarFormulario)
   }
 
+  // Registra Colaborador
+  const registrarColaborador = (colaborador) => {
+    const nuevoColaboradores = [...colaboradores, colaborador]
+    actualizarColaboradores(nuevoColaboradores)
+  }
+
+  useEffect(() => {
+    localStorage.setItem('colaboradores', JSON.stringify(colaboradores))
+  }, [colaboradores])
+  
   // Lista de Equipos
   const equipos = [
     {
       titulo: "Programación",
-      colorPrimario: "#57C278",
+      colorPrimario: "#02FF52FF",
       colorSecundario: "#D9F7E9"
     },
     {
@@ -27,40 +47,49 @@ function App() {
     {
       titulo: "Data Science",
       colorPrimario: "#A6D157",
-      colorSecundar: "#F0F8E2"
+      colorSecundario: "#F0F8E2"
     },
     {
       titulo: "Devops",
       colorPrimario: "#E06B69",
-      colorSecundar: "#FDE7E8"
+      colorSecundario: "#FDE7E8"
     },
     {
       titulo: "UX y Diseño",
       colorPrimario: "#DB6EBF",
-      colorSecundar: "#FAE9F5"
+      colorSecundario: "#FAE9F5"
     },
     {
       titulo: "Móvil",
-      colorPrimario: "#FFBA05",
-      colorSecundar: "#FFF5D9"
+      colorPrimario: "#ffba05",
+      colorSecundario: "#ffecbb"
     },
     {
       titulo: "Innovación y Gestión",
-      colorPrimario: "#FF8A29",
-      colorSecundar: "#FFEEDF"
+      colorPrimario: "#ff8a29",
+      colorSecundario: "#ffe0c4"
     }
   ]
 
   return (
     <div>
       <Header />
-      {/* {mostrarFormulario ? <Formulario /> : <></>} */}
-      {mostrarFormulario && <Formulario />}
+      {mostrarFormulario && <Formulario
+        equipos={equipos.map((equipo) => equipo.titulo)}
+        registrarColaborador={registrarColaborador}
+      />
+      }
       <MiOrg cambiarMostrar={cambiarMostrar} />
 
       {
-        equipos.map((equipo) => <Equipo datos={equipo} key={equipo.titulo}/>)
+        equipos.map((equipo) => <Equipo
+          datos={equipo}
+          key={equipo.titulo}
+          colaboradores={colaboradores.filter(colaborador => colaborador.equipo === equipo.titulo)}
+        />)
       }
+
+      <Footer></Footer>
 
     </div>
   );
