@@ -1,10 +1,12 @@
 import './colaborador.css';
+import { IoIosCloseCircle } from 'react-icons/io'
 
 const Colaborador = (props) => {
     const { nombre, puesto, foto, equipo } = props.datos;
-    const { colorPrimario } = props;
+    const { colorPrimario, eliminarColaborador } = props;
 
     return <div className='coloborador'>
+        <IoIosCloseCircle className='eliminar' onClick={eliminarColaborador}></IoIosCloseCircle>
         <div className='encabezado' style={{backgroundColor: colorPrimario}}>
             <img src={foto} alt={nombre}/>
         </div>
@@ -16,4 +18,4 @@ const Colaborador = (props) => {
     </div>
 }
 
-export default Colaborador;
+export default Colaborador; 

@@ -10,12 +10,14 @@ function App() {
   const [mostrarFormulario, actualizarMostrar] = useState(false);
   const [colaboradores, actualizarColaboradores] = useState(() => {
     const datosGuardados = localStorage.getItem('colaboradores');
-    return datosGuardados ? JSON.parse(datosGuardados) : [{
-      equipo: "Programación",
-      foto: "https://avatars.githubusercontent.com/u/93751686?v=4",
-      nombre: "Marlon Yber",
-      puesto: "Ingeniero de Sistemas",
-    }];
+    return datosGuardados ? JSON.parse(datosGuardados) : [
+      {
+        equipo: "Programación",
+        foto: "https://avatars.githubusercontent.com/u/93751686?v=4",
+        nombre: "Marlon Yber",
+        puesto: "Ingeniero de Sistemas",
+      },
+    ];
   });
 
   const cambiarMostrar = () => {
@@ -28,12 +30,26 @@ function App() {
     actualizarColaboradores(nuevoColaboradores)
   }
 
+  const eliminarColaborador = () => {
+    console.log('Eliminar colaborador');
+  }
+
   useEffect(() => {
     localStorage.setItem('colaboradores', JSON.stringify(colaboradores))
   }, [colaboradores])
-  
+
+  const actualizarColor = (color, titulo) => {
+    const equiposActualizados = equipos.map((equipo) => {
+      if (equipo.titulo === titulo) {
+        equipo.colorPrimario = color
+      }
+      return equipo
+    })
+    actualizarEquipos(equiposActualizados)
+  }
+
   // Lista de Equipos
-  const equipos = [
+  const [equipos, actualizarEquipos] = useState([
     {
       titulo: "Programación",
       colorPrimario: "#02FF52FF",
@@ -69,7 +85,7 @@ function App() {
       colorPrimario: "#ff8a29",
       colorSecundario: "#ffe0c4"
     }
-  ]
+  ])
 
   return (
     <div>
@@ -86,10 +102,12 @@ function App() {
           datos={equipo}
           key={equipo.titulo}
           colaboradores={colaboradores.filter(colaborador => colaborador.equipo === equipo.titulo)}
+          eliminarColaborador={eliminarColaborador}
+          actualizarColor={actualizarColor}
         />)
       }
 
-      <Footer></Footer>
+      <Footer />
 
     </div>
   );
