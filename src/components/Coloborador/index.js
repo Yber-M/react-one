@@ -15,7 +15,7 @@ const Colaborador = (props) => {
         <div className='info'>
             <h4>{nombre}</h4>
             <h5>{puesto}</h5>
-            {fav ? <IoIosHeart color='red' onClick={() => like(id)} /> : <IoIosHeartEmpty onClick={() => like(id)} />}
+            {fav ? <IoIosHeart className='icono' color='red' onClick={() => like(id)} /> : <IoIosHeartEmpty className='icono' onClick={() => like(id)} />}
 
         </div>
     </div>
